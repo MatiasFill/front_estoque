@@ -1,0 +1,43 @@
+import { defineStore } from "pinia";
+import api from "@/api/axios.js";
+
+export const useAuthStore = defineStore("auth", {
+  state: () => ({
+    token: localStorage.getItem('token') || null,
+    isAuthenticated: !!localStorage.getItem('token'),
+    error: null,
+  }),
+  actions: {
+    async login(username, password) {
+      this.error = null;
+      try {
+        const res = await api.post("/login", { username, password });
+        this.token = res.data.token;
+        this.isAuthenticated = true;
+        localStorage.setItem('token', this.token);
+        // Configura o cabeçalho de autorização padrão para todas as futuras requisições do Axios
+        api.defaults.headers.common['Authorization'] = `Bearer ${this.token}`;
+        return true;
+      } catch (err) {
+        this.error = "Credenciais inválidas. Por favor, tente novamente.";
+        return false;
+      }
+    },
+    logout() {
+      this.token = null;
+      this.isAuthenticated = false;
+      localStorage.removeItem('token');
+      // Remove o cabeçalho de autorização padrão
+      delete api.defaults.headers.common['Authorization'];
+    },
+    // Método para inicializar o token ao carregar a página
+    initialize() {
+      const token = localStorage.getItem('token');
+      if (token) {
+        this.token = token;
+        this.isAuthenticated = true;
+        api.defaults.headers.common['Authorization'] = `Bearer ${this.token}`;
+      }
+    }
+  },
+});
