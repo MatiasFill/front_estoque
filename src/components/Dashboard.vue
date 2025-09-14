@@ -42,7 +42,7 @@
 
 <script setup>
 import { computed } from 'vue';
-import { useStockStore } from '../stores/stock.js';
+import { useStockStore } from '../stores/stock.cjs';
 
 const store = useStockStore();
 

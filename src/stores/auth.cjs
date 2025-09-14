@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import api from "@/api/axios.js";
+import api from "@/api/axios.cjs";
 
 export const useAuthStore = defineStore("auth", {
   state: () => ({
