@@ -1,5 +1,5 @@
 import api from './axios.cjs';
-import { getToken } from './auth.js';
+import { getToken } from './auth.cjs';
 
 export async function fetchProducts() {
   return (await api.get('/products')).data;
