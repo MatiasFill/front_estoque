@@ -12,7 +12,7 @@ export const useStockStore = defineStore("stock", {
       this.isLoading = true;
       this.error = null;
       try {
-        const res = await api.get("/products");
+        const res = await api.get("/api/products");
         this.products = res.data;
       } catch (err) {
         this.error = err.message;
@@ -22,7 +22,7 @@ export const useStockStore = defineStore("stock", {
     },
     async addProduct(product) {
       try {
-        const res = await api.post("/products", product);
+        const res = await api.post("/api/products", product);
         this.products.push(res.data);
       } catch (err) {
         this.error = err.message;
@@ -30,7 +30,7 @@ export const useStockStore = defineStore("stock", {
     },
     async updateProduct(product) {
       try {
-        const res = await api.put(`/products/${product.id}`, product);
+        const res = await api.put(`/api/products/${product.id}`, product);
         const index = this.products.findIndex((p) => p.id === product.id);
         if (index !== -1) this.products[index] = res.data;
       } catch (err) {
@@ -39,7 +39,7 @@ export const useStockStore = defineStore("stock", {
     },
     async deleteProduct(id) {
       try {
-        await api.delete(`/products/${id}`);
+        await api.delete(`/api/products/${id}`);
         this.products = this.products.filter((p) => p.id !== id);
       } catch (err) {
         this.error = err.message;

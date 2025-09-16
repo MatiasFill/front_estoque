@@ -7,9 +7,9 @@ const router = createRouter({
   history: createWebHistory(),
   routes: [
     { path: '/', name: 'Dashboard', component: Dashboard },
-    { path: '/products', name: 'ProductList', component: ProductList },
-    { path: '/products/add', name: 'AddProduct', component: ProductForm },
-    { path: '/products/edit/:id', name: 'EditProduct', component: ProductForm },
+    { path: '/api/products', name: 'ProductList', component: ProductList },
+    { path: '/api/products/add', name: 'AddProduct', component: ProductForm },
+    { path: '/api/products/edit/:id', name: 'EditProduct', component: ProductForm },
   ]
 });
 
