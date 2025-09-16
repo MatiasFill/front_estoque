@@ -1,20 +1,3 @@
-/*
-import api from './axios';
-
-// Buscar todos os produtos
-export const getProducts = () => api.get('/products');
-
-// Criar um novo produto
-export const createProduct = (data) => api.post('/products', data);
-
-// Atualizar um produto
-export const updateProduct = (id, data) => api.put(`/products/${id}`, data);
-
-// Deletar um produto
-export const deleteProduct = (id) => api.delete(`/products/${id}`);
-*/
-
-
 import api from './axios.cjs';
 import { getToken } from './auth.cjs';
 
