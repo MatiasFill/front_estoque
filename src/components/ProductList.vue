@@ -194,7 +194,7 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue';
-import { useStockStore } from '../stores/stock.cjs';
+import { useStockStore } from '../stores/stock.js';
 import ProductForm from './ProductForm.vue';
 import ConfirmModal from './ConfirmModal.vue';
 import jsPDF from 'jspdf';
