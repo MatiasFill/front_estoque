@@ -1,3 +1,41 @@
+// vite.config.js
+import { defineConfig } from 'vite';
+import vue from '@vitejs/plugin-vue';
+import path from 'path';
+
+export default defineConfig({
+  plugins: [vue()],
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, './src'), // Permite usar @ para src
+    },
+  },
+  build: {
+    target: 'esnext',
+    chunkSizeWarningLimit: 500, // Limite para warnings (em kB)
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          // Separar dependências pesadas em chunks separados
+          if (id.includes('node_modules')) {
+            if (id.includes('vue')) return 'vue-vendor';
+            if (id.includes('pinia')) return 'pinia-vendor';
+            if (id.includes('vue-router')) return 'router-vendor';
+            return 'vendor';
+          }
+        },
+      },
+    },
+  },
+  server: {
+    port: 5173,
+    open: true,
+  },
+});
+
+
+
+/*
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 
@@ -16,3 +54,4 @@ export default defineConfig({
     },
   },
 });
+*/
