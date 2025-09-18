@@ -1,3 +1,75 @@
+// src/api/axios.js
+import axios from 'axios';
+
+// Base URL do backend (dev -> localhost, prod -> variável do Vercel)
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+
+console.log(' Conectando na API em:', API_URL);
+
+// Cria a instância do Axios
+const api = axios.create({
+  baseURL: API_URL,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  timeout: 10000, // 10s
+});
+
+// Interceptor para adicionar token JWT automaticamente
+api.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
+
+// Interceptor para tratamento global de erros
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    console.error('❌ Erro na requisição:', error.response?.data || error.message);
+    return Promise.reject(error);
+  }
+);
+
+//
+// 🔹 Funções genéricas equivalentes ao api.js (baseadas no Axios agora)
+//
+
+// GET genérico
+export async function getRequest(path) {
+  try {
+    const res = await api.get(path);
+    return res.data;
+  } catch (err) {
+    console.error(' Erro no GET:', err);
+    throw err;
+  }
+}
+
+// POST genérico
+export async function postRequest(path, body, token = null) {
+  try {
+    const headers = {};
+    if (token) headers.Authorization = `Bearer ${token}`;
+
+    const res = await api.post(path, body, { headers });
+    return res.data;
+  } catch (err) {
+    console.error(' Erro no POST:', err);
+    throw err;
+  }
+}
+
+export default api;
+
+
+
+/*
 import axios from 'axios';
 
 // Base URL do backend
@@ -44,7 +116,7 @@ export const testConnection = async () => {
 
 export default api;
 
-
+*/
 /*
 import axios from 'axios';
 
