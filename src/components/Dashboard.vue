@@ -31,7 +31,7 @@
 
     <div class="mt-8 text-center">
       <router-link
-        to="/products"
+        to="api/products"
         class="inline-block bg-blue-600 text-white px-6 py-2 rounded-full font-semibold shadow-lg hover:bg-blue-700 transition duration-300 transform hover:scale-105"
       >
         Gerenciar Produtos
