@@ -1,33 +1,34 @@
 // src/api/axios.js
 import axios from 'axios';
 
-// Base URL do backend (dev -> localhost, prod -> variável do Vercel)
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+// Base URL do backend
+// Deve existir como variável de ambiente no Vite: VITE_API_URL
+// Ex.: .env.local (dev): VITE_API_URL=http://localhost:3000
+//      Vercel (prod): VITE_API_URL=https://estoqback.vercel.app
+const API_URL = import.meta.env.VITE_API_URL;
 
-console.log(' Conectando na API em:', API_URL);
+if (!API_URL) {
+  console.error('❌ VITE_API_URL não definida! Verifique seu .env e variáveis do Vercel.');
+}
 
-// Cria a instância do Axios
+// Cria instância do Axios
 const api = axios.create({
   baseURL: API_URL,
-  headers: {
-    'Content-Type': 'application/json',
-  },
-  timeout: 10000, // 10s
+  headers: { 'Content-Type': 'application/json' },
+  timeout: 10000,
 });
 
-// Interceptor para adicionar token JWT automaticamente
+// Adiciona token automaticamente
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('token');
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
+    if (token) config.headers.Authorization = `Bearer ${token}`;
     return config;
   },
   (error) => Promise.reject(error)
 );
 
-// Interceptor para tratamento global de erros
+// Interceptor de erro global
 api.interceptors.response.use(
   (response) => response,
   (error) => {
@@ -36,37 +37,27 @@ api.interceptors.response.use(
   }
 );
 
-//
-// 🔹 Funções genéricas equivalentes ao api.js (baseadas no Axios agora)
-//
-
-// GET genérico
+// Funções genéricas para substituir api.js antigo
 export async function getRequest(path) {
   try {
     const res = await api.get(path);
     return res.data;
   } catch (err) {
-    console.error(' Erro no GET:', err);
     throw err;
   }
 }
 
-// POST genérico
 export async function postRequest(path, body, token = null) {
   try {
-    const headers = {};
-    if (token) headers.Authorization = `Bearer ${token}`;
-
+    const headers = token ? { Authorization: `Bearer ${token}` } : {};
     const res = await api.post(path, body, { headers });
     return res.data;
   } catch (err) {
-    console.error(' Erro no POST:', err);
     throw err;
   }
 }
 
 export default api;
-
 
 
 /*

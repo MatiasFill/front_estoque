@@ -1,75 +1,38 @@
 // src/api/products.js
 import api from './axios.js';
-import { getToken } from './auth.js';
 
-/**
- * Busca todos os produtos.
- * @returns {Array} Lista de produtos.
- */
+// GET todos produtos
 export async function fetchProducts() {
-  try {
-    const res = await api.get('/api/products');
-    return res.data;
-  } catch (err) {
-    console.error('Erro ao buscar produtos:', err);
-    throw new Error(err.response?.data?.message || err.message);
-  }
+  const res = await api.get('/api/products');
+  return res.data;
 }
 
-/**
- * Adiciona um novo produto.
- * @param {Object} product - Produto a ser adicionado.
- * @returns {Object} Produto criado.
- */
+// POST novo produto
 export async function addProduct(product) {
-  try {
-    const token = getToken();
-    const res = await api.post('/api/products', product, {
-      headers: { Authorization: `Bearer ${token}` }
-    });
-    return res.data;
-  } catch (err) {
-    console.error('Erro ao adicionar produto:', err);
-    throw new Error(err.response?.data?.message || err.message);
-  }
+  const token = localStorage.getItem('token');
+  const res = await api.post('/api/products', product, {
+    headers: { Authorization: token ? `Bearer ${token}` : '' }
+  });
+  return res.data;
 }
 
-/**
- * Atualiza um produto existente.
- * @param {Object} product - Produto atualizado (deve conter id).
- * @returns {Object} Produto atualizado.
- */
+// PUT atualizar produto
 export async function updateProduct(product) {
-  try {
-    const token = getToken();
-    const res = await api.put(`/api/products/${product.id}`, product, {
-      headers: { Authorization: `Bearer ${token}` }
-    });
-    return res.data;
-  } catch (err) {
-    console.error('Erro ao atualizar produto:', err);
-    throw new Error(err.response?.data?.message || err.message);
-  }
+  const token = localStorage.getItem('token');
+  const res = await api.put(`/api/products/${product.id}`, product, {
+    headers: { Authorization: token ? `Bearer ${token}` : '' }
+  });
+  return res.data;
 }
 
-/**
- * Deleta um produto pelo ID.
- * @param {number|string} id - ID do produto a ser deletado.
- * @returns {Object} Mensagem de sucesso.
- */
+// DELETE produto
 export async function deleteProduct(id) {
-  try {
-    const token = getToken();
-    await api.delete(`/api/products/${id}`, {
-      headers: { Authorization: `Bearer ${token}` }
-    });
-    return { message: 'Produto excluído com sucesso' };
-  } catch (err) {
-    console.error('Erro ao deletar produto:', err);
-    throw new Error(err.response?.data?.message || err.message);
-  }
+  const token = localStorage.getItem('token');
+  await api.delete(`/api/products/${id}`, {
+    headers: { Authorization: token ? `Bearer ${token}` : '' }
+  });
+  return { message: 'Produto excluído com sucesso' };
 }
-
 
 
 /*
