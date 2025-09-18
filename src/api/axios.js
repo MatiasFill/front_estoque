@@ -1,5 +1,53 @@
 import axios from 'axios';
 
+// Base URL do backend
+// - Local: http://localhost:3000
+// - Produção: /api (Vercel proxy)
+const API_URL = import.meta.env.VITE_API_URL || '/api';
+console.log('Axios vai se conectar em:', API_URL);
+
+// Cria a instância do Axios
+const api = axios.create({
+  baseURL: API_URL,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  timeout: 10000, // 10s
+});
+
+// Interceptor para adicionar token JWT automaticamente
+api.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
+
+// Interceptor para tratamento global de erros
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    console.error('Erro na requisição:', error.response?.data || error.message);
+    return Promise.reject(error);
+  }
+);
+
+// Função de teste de conexão
+export const testConnection = async () => {
+  const res = await api.get('/produtos'); // sua rota de teste
+  return res.data;
+};
+
+export default api;
+
+
+/*
+import axios from 'axios';
+
 // Base URL do backend (local ou produção via VITE_API_URL)
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 console.log('Axios vai se conectar em:', API_URL); // Verifica se a URL está correta
@@ -46,7 +94,7 @@ export const testConnection = async () => {
 
 export default api;
 
-
+*/
 
 /*
 // src/api/axios.js
