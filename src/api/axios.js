@@ -38,7 +38,7 @@ api.interceptors.response.use(
 
 // Função de teste de conexão
 export const testConnection = async () => {
-  const res = await api.get('/produtos'); // sua rota de teste
+  const res = await api.get('api/produtos'); // sua rota de teste
   return res.data;
 };
 
