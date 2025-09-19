@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // Base URL do backend (local ou produção via VITE_API_URL)
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/';
+const API_URL = import.meta.env.VITE_API_URL || 'https://estoqback.vercel.app/';
 console.log('Axios vai se conectar em:', API_URL); // Verifica se a URL está correta
 
 // Cria a instância do Axios
