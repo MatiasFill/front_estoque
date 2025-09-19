@@ -10,11 +10,11 @@
   "routes": [
     {
       "src": "/api/(.*)",
-      "dest": "https://front-estoque-sigma.vercel.app/$1"
+      "dest": "https://front-estoque-sigma.vercel.app"
     },
     {
       "src": "/(.*)",
-      "dest": "/index.html"
+      "dest": "/index.js"
     }
   ]
 }
