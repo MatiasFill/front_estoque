@@ -1,5 +1,61 @@
 import axios from 'axios';
 
+// Base URL do backend. Pega a variável de ambiente do Vite.
+const API_URL = import.meta.env.VITE_API_URL;
+
+// -------------------------------------------------------------
+// Cria a instância do Axios
+// -------------------------------------------------------------
+const api = axios.create({
+  baseURL: API_URL,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  timeout: 10000, // 10 segundos de timeout
+});
+
+// -------------------------------------------------------------
+// Interceptores
+// -------------------------------------------------------------
+
+// Adiciona o token de autenticação em todas as requisições
+api.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
+
+// Trata erros de resposta de forma global
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    console.error('Erro na requisição:', error.response?.data || error.message);
+    
+    // Exemplo de tratamento para token expirado ou inválido
+    if (error.response?.status === 401) {
+      // Opcional: redirecionar para a página de login
+      // window.location.href = '/login';
+    }
+
+    return Promise.reject(error);
+  }
+);
+
+// -------------------------------------------------------------
+// Exporta a instância
+// -------------------------------------------------------------
+export default api;
+
+
+
+/*
+import axios from 'axios';
+
 // Base URL do backend (local ou produção via VITE_API_URL)
 const API_URL = import.meta.env.VITE_API_URL || 'https://estoqback.vercel.app/';
 console.log('Axios vai se conectar em:', API_URL); // Verifica se a URL está correta
@@ -45,7 +101,7 @@ export const testConnection = async () => {
 };
 
 export default api;
-
+*/
 
 
 /*
